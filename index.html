@@ -37,18 +37,18 @@
               contrast: '#ffffff'
             },
             // Cores dependentes do tema (definidas em styles.css)
-            white: 'rgb(var(--white) / <alpha-value>)',
+            white: 'rgb(var(--white, 255 255 255) / <alpha-value>)',
             dark: {
-              900: 'rgb(var(--dark-900) / <alpha-value>)',
-              800: 'rgb(var(--dark-800) / <alpha-value>)',
-              700: 'rgb(var(--dark-700) / <alpha-value>)',
-              600: 'rgb(var(--dark-600) / <alpha-value>)',
-              500: 'rgb(var(--dark-500) / <alpha-value>)'
+              900: 'rgb(var(--dark-900, 10 10 10) / <alpha-value>)',
+              800: 'rgb(var(--dark-800, 17 17 17) / <alpha-value>)',
+              700: 'rgb(var(--dark-700, 26 26 26) / <alpha-value>)',
+              600: 'rgb(var(--dark-600, 34 34 34) / <alpha-value>)',
+              500: 'rgb(var(--dark-500, 42 42 42) / <alpha-value>)'
             },
             gray: {
-              300: 'rgb(var(--gray-300) / <alpha-value>)',
-              400: 'rgb(var(--gray-400) / <alpha-value>)',
-              500: 'rgb(var(--gray-500) / <alpha-value>)'
+              300: 'rgb(var(--gray-300, 209 213 219) / <alpha-value>)',
+              400: 'rgb(var(--gray-400, 156 163 175) / <alpha-value>)',
+              500: 'rgb(var(--gray-500, 107 114 128) / <alpha-value>)'
             }
           },
           fontFamily: {
@@ -62,7 +62,7 @@
       }
     }
   </script>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=2" />
 </head>
 <body class="bg-dark-900 text-white antialiased">
   <!-- Navbar -->
@@ -326,6 +326,6 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=2"></script>
 </body>
 </html>
