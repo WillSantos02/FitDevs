@@ -3,6 +3,41 @@
 (function () {
   "use strict";
 
+  // Theme toggle (light/dark)
+  const THEME_KEY = "fitdevs-theme";
+  const root = document.documentElement;
+  const themeToggle = document.getElementById("theme-toggle");
+
+  function applyTheme(theme) {
+    root.setAttribute("data-theme", theme);
+    if (themeToggle) {
+      const label = theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro";
+      themeToggle.setAttribute("aria-label", label);
+      themeToggle.setAttribute("title", label);
+    }
+  }
+
+  applyTheme(root.getAttribute("data-theme") || "dark");
+
+  if (themeToggle) {
+    themeToggle.addEventListener("click", function () {
+      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      applyTheme(next);
+      try {
+        localStorage.setItem(THEME_KEY, next);
+      } catch (e) {}
+    });
+  }
+
+  // Follow the OS preference until the user picks a theme explicitly
+  window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", function (e) {
+    let saved = null;
+    try {
+      saved = localStorage.getItem(THEME_KEY);
+    } catch (err) {}
+    if (!saved) applyTheme(e.matches ? "light" : "dark");
+  });
+
   // Smooth scroll for anchor links (fallback for browsers without CSS support)
   document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
     anchor.addEventListener("click", function (e) {

@@ -1,17 +1,57 @@
 /* FitDevs Landing Page — Custom Styles */
 
+/* Theme tokens (RGB channels, consumed by the Tailwind config) */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --white: 255 255 255;
+  --dark-900: 10 10 10;
+  --dark-800: 17 17 17;
+  --dark-700: 26 26 26;
+  --dark-600: 34 34 34;
+  --dark-500: 42 42 42;
+  --gray-300: 209 213 219;
+  --gray-400: 156 163 175;
+  --gray-500: 107 114 128;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --white: 17 17 17;
+  --dark-900: 255 255 255;
+  --dark-800: 245 247 245;
+  --dark-700: 236 239 236;
+  --dark-600: 226 230 226;
+  --dark-500: 212 217 212;
+  --gray-300: 55 65 81;
+  --gray-400: 75 85 99;
+  --gray-500: 107 114 128;
+}
+
+/* Theme toggle icons */
+:root[data-theme="dark"] .theme-icon-moon,
+:root[data-theme="light"] .theme-icon-sun {
+  display: none;
+}
+
+/* Keep error red readable on light backgrounds */
+:root[data-theme="light"] .text-red-400 {
+  color: #dc2626;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
   font-feature-settings: "liga" 1, "calt" 1;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Selection */
 ::selection {
   background-color: rgba(0, 149, 12, 0.3);
-  color: #fff;
+  color: rgb(var(--white));
 }
 
 /* Focus visible */
@@ -43,12 +83,6 @@ article,
 article:nth-child(1) { animation-delay: 0.1s; }
 article:nth-child(2) { animation-delay: 0.2s; }
 article:nth-child(3) { animation-delay: 0.3s; }
-
-/* Mockup image treatment */
-img[alt*="Mockup"] {
-  mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
-}
 
 /* Form states */
 #vip-form input:user-invalid {
