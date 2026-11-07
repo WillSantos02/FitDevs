@@ -11,7 +11,8 @@
   function applyTheme(theme) {
     root.setAttribute("data-theme", theme);
     if (themeToggle) {
-      const label = theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro";
+      const label =
+        theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro";
       themeToggle.setAttribute("aria-label", label);
       themeToggle.setAttribute("title", label);
     }
@@ -21,7 +22,8 @@
 
   if (themeToggle) {
     themeToggle.addEventListener("click", function () {
-      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      const next =
+        root.getAttribute("data-theme") === "dark" ? "light" : "dark";
       applyTheme(next);
       try {
         localStorage.setItem(THEME_KEY, next);
@@ -30,13 +32,15 @@
   }
 
   // Follow the OS preference until the user picks a theme explicitly
-  window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", function (e) {
-    let saved = null;
-    try {
-      saved = localStorage.getItem(THEME_KEY);
-    } catch (err) {}
-    if (!saved) applyTheme(e.matches ? "light" : "dark");
-  });
+  window
+    .matchMedia("(prefers-color-scheme: light)")
+    .addEventListener("change", function (e) {
+      let saved = null;
+      try {
+        saved = localStorage.getItem(THEME_KEY);
+      } catch (err) {}
+      if (!saved) applyTheme(e.matches ? "light" : "dark");
+    });
 
   // Smooth scroll for anchor links (fallback for browsers without CSS support)
   document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
@@ -69,7 +73,8 @@
       }
 
       // Simulate submission success
-      message.textContent = "🎉 Você entrou na Lista VIP! Em breve mandamos novidades.";
+      message.textContent =
+        "🎉 Você entrou na Lista VIP! Em breve mandamos novidades.";
       message.classList.remove("hidden", "text-red-400");
       message.classList.add("text-brand");
       emailInput.value = "";
