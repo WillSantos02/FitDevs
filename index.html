@@ -1,331 +1,699 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FitDevs — Transforme seus treinos em uma jornada épica</title>
-  <meta name="description" content="FitDevs é o aplicativo para quem quer transformar a rotina de treinos em uma jornada épica com amigos. Match de treino, competições e feed da galera." />
-  <meta property="og:title" content="FitDevs — Transforme seus treinos em uma jornada épica" />
-  <meta property="og:description" content="O aplicativo definitivo para quem quer treinar com amigos, criar competições e subir no ranking." />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script>
-    // Aplica o tema antes da renderização para evitar "flash" de tema errado
-    (function () {
-      var theme;
-      try { theme = localStorage.getItem('fitdevs-theme'); } catch (e) {}
-      if (theme !== 'light' && theme !== 'dark') {
-        theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-      }
-      document.documentElement.setAttribute('data-theme', theme);
-    })();
-  </script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              DEFAULT: '#00950C',
-              dark: '#007A0A',
-              light: '#00B80F',
-              glow: 'rgba(0, 149, 12, 0.35)',
-              contrast: '#ffffff'
-            },
-            // Cores dependentes do tema (definidas em styles.css)
-            white: 'rgb(var(--white, 255 255 255) / <alpha-value>)',
-            dark: {
-              900: 'rgb(var(--dark-900, 10 10 10) / <alpha-value>)',
-              800: 'rgb(var(--dark-800, 17 17 17) / <alpha-value>)',
-              700: 'rgb(var(--dark-700, 26 26 26) / <alpha-value>)',
-              600: 'rgb(var(--dark-600, 34 34 34) / <alpha-value>)',
-              500: 'rgb(var(--dark-500, 42 42 42) / <alpha-value>)'
-            },
-            gray: {
-              300: 'rgb(var(--gray-300, 209 213 219) / <alpha-value>)',
-              400: 'rgb(var(--gray-400, 156 163 175) / <alpha-value>)',
-              500: 'rgb(var(--gray-500, 107 114 128) / <alpha-value>)'
-            }
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif']
-          },
-          boxShadow: {
-            'brand': '0 0 16px rgba(0, 149, 12, 0.2)',
-            'brand-lg': '0 0 24px rgba(0, 149, 12, 0.3)'
-          }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JuntaFit — Encontre sua companhia. Transforme seu treino.</title>
+    <meta
+      name="description"
+      content="Conecte-se com pessoas que compartilham suas modalidades, objetivos e horários. Encontre parceiros ideais, descubra novos esportes e movimente-se em comunidade."
+    />
+    <meta
+      property="og:title"
+      content="JuntaFit — Encontre sua companhia. Transforme seu treino."
+    />
+    <meta
+      property="og:description"
+      content="Muito além de um parceiro de treino: uma comunidade que se movimenta junto."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      // Aplica o tema antes da renderização para evitar "flash" de tema errado
+      (function () {
+        var theme;
+        try {
+          theme = localStorage.getItem("fitdevs-theme");
+        } catch (e) {}
+        if (theme !== "light" && theme !== "dark") {
+          theme = window.matchMedia("(prefers-color-scheme: light)").matches
+            ? "light"
+            : "dark";
         }
-      }
-    }
-  </script>
-  <link rel="stylesheet" href="styles.css?v=2" />
-</head>
-<body class="bg-dark-900 text-white antialiased">
-  <!-- Navbar -->
-  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-dark-900/80 backdrop-blur-md">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-      <a href="#" class="flex items-center text-2xl tracking-tight">
-        <span class="font-normal text-white">Fit</span><span class="font-bold text-brand">Devs</span>
-      </a>
-      <div class="hidden items-center gap-8 text-sm font-medium text-gray-300 md:flex">
-        <a href="#problema" class="transition-colors hover:text-brand">O Problema</a>
-        <a href="#funcionalidades" class="transition-colors hover:text-brand">Funcionalidades</a>
-        <a href="#equipe" class="transition-colors hover:text-brand">Equipe</a>
-        <a href="#lista-vip" class="transition-colors hover:text-brand">Lista VIP</a>
-      </div>
-      <div class="flex items-center gap-3">
-        <button
-          type="button"
-          id="theme-toggle"
-          class="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-gray-300 transition-colors hover:text-brand"
-          aria-label="Alternar tema"
-          title="Alternar tema"
-        >
-          <svg class="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-          <svg class="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-        </button>
-        <a href="#lista-vip" class="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-brand-contrast shadow-brand transition-all hover:bg-brand-light hover:shadow-brand-lg">
-          Quero testar primeiro
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                DEFAULT: "#00950C",
+                dark: "#007A0A",
+                light: "#00B80F",
+                glow: "rgba(0, 149, 12, 0.35)",
+                contrast: "#ffffff",
+              },
+              // Cores dependentes do tema (definidas em styles.css)
+              white: "rgb(var(--white, 255 255 255) / <alpha-value>)",
+              dark: {
+                900: "rgb(var(--dark-900, 10 10 10) / <alpha-value>)",
+                800: "rgb(var(--dark-800, 17 17 17) / <alpha-value>)",
+                700: "rgb(var(--dark-700, 26 26 26) / <alpha-value>)",
+                600: "rgb(var(--dark-600, 34 34 34) / <alpha-value>)",
+                500: "rgb(var(--dark-500, 42 42 42) / <alpha-value>)",
+              },
+              gray: {
+                300: "rgb(var(--gray-300, 209 213 219) / <alpha-value>)",
+                400: "rgb(var(--gray-400, 156 163 175) / <alpha-value>)",
+                500: "rgb(var(--gray-500, 107 114 128) / <alpha-value>)",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+            },
+            boxShadow: {
+              brand: "0 0 16px rgba(0, 149, 12, 0.2)",
+              "brand-lg": "0 0 24px rgba(0, 149, 12, 0.3)",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="styles.css?v=2" />
+  </head>
+  <body class="bg-dark-900 text-white antialiased">
+    <!-- Navbar -->
+    <nav
+      class="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-dark-900/80 backdrop-blur-md"
+    >
+      <div
+        class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4"
+      >
+        <a href="#" class="flex items-center text-2xl tracking-tight">
+          <span class="font-normal text-white">Junta</span
+          ><span class="font-bold text-brand">Fit</span>
         </a>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Hero -->
-  <section class="relative flex min-h-screen items-center overflow-hidden pt-20">
-    <div class="absolute inset-0 pointer-events-none">
-      <div class="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-brand/10 blur-[120px]"></div>
-      <div class="absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-brand/5 blur-[100px]"></div>
-    </div>
-
-    <div class="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-2">
-      <div class="space-y-8">
-        <div class="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand/10 px-4 py-1.5 text-sm font-medium text-brand">
-          <span class="relative flex h-2 w-2">
-            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-75"></span>
-            <span class="relative inline-flex h-2 w-2 rounded-full bg-brand"></span>
-          </span>
-          Em breve na App Store e Google Play
+        <div
+          class="hidden items-center gap-8 text-sm font-medium text-gray-300 md:flex"
+        >
+          <a href="#problema" class="transition-colors hover:text-brand"
+            >O Problema</a
+          >
+          <a href="#funcionalidades" class="transition-colors hover:text-brand"
+            >Funcionalidades</a
+          >
+          <a href="#equipe" class="transition-colors hover:text-brand"
+            >Equipe</a
+          >
+          <a href="#lista-vip" class="transition-colors hover:text-brand"
+            >Lista VIP</a
+          >
         </div>
-        <h1 class="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-          Chega de programar o dia todo <span class="text-gray-500">sem sair da cadeira.</span><br />
-          <span class="text-brand">Conecte-se, treine e compita</span> com seus amigos.
-        </h1>
-        <p class="max-w-xl text-lg leading-relaxed text-gray-400">
-          O aplicativo definitivo para quem quer transformar a rotina de treinos em uma jornada épica com a galera. Marque treinos, crie desafios e suba no ranking da sua turma.
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            id="theme-toggle"
+            class="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-gray-300 transition-colors hover:text-brand"
+            aria-label="Alternar tema"
+            title="Alternar tema"
+          >
+            <svg
+              class="theme-icon-sun"
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2" />
+              <path d="M12 20v2" />
+              <path d="m4.93 4.93 1.41 1.41" />
+              <path d="m17.66 17.66 1.41 1.41" />
+              <path d="M2 12h2" />
+              <path d="M20 12h2" />
+              <path d="m6.34 17.66-1.41 1.41" />
+              <path d="m19.07 4.93-1.41 1.41" />
+            </svg>
+            <svg
+              class="theme-icon-moon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+            </svg>
+          </button>
+          <a
+            href="#lista-vip"
+            class="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-brand-contrast shadow-brand transition-all hover:bg-brand-light hover:shadow-brand-lg"
+          >
+            Programa de testes
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section
+      class="relative flex min-h-screen items-center overflow-hidden pt-20"
+    >
+      <div class="absolute inset-0 pointer-events-none">
+        <div
+          class="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-brand/10 blur-[120px]"
+        ></div>
+        <div
+          class="absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-brand/5 blur-[100px]"
+        ></div>
+      </div>
+
+      <div
+        class="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-2"
+      >
+        <div class="space-y-8">
+          <div
+            class="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand/10 px-4 py-1.5 text-sm font-medium text-brand"
+          >
+            <span class="relative flex h-2 w-2">
+              <span
+                class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-75"
+              ></span>
+              <span
+                class="relative inline-flex h-2 w-2 rounded-full bg-brand"
+              ></span>
+            </span>
+            Em breve na Google Play
+          </div>
+          <h1
+            class="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl"
+          >
+            Encontre sua companhia.
+            <span class="text-brand">Transforme seu treino.</span>
+          </h1>
+          <p class="max-w-xl text-lg leading-relaxed text-gray-400">
+            Conecte-se com pessoas que compartilham suas modalidades, objetivos
+            e horários. Encontre parceiros ideais, descubra novos esportes e
+            movimente-se em comunidade.
+          </p>
+          <div class="flex flex-wrap items-center gap-4">
+            <a
+              href="#lista-vip"
+              class="rounded-full bg-brand px-8 py-4 text-base font-bold text-brand-contrast shadow-brand transition-all hover:-translate-y-0.5 hover:bg-brand-light hover:shadow-brand-lg"
+            >
+              Quero conhecer o JuntaFit
+            </a>
+            <a
+              href="#funcionalidades"
+              class="rounded-full border border-white/10 bg-white/5 px-8 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10"
+            >
+              Ver funcionalidades
+            </a>
+          </div>
+          <p class="max-w-xl text-base font-medium text-gray-300">
+            Muito além de um parceiro de treino: uma comunidade que se movimenta
+            junto.
+          </p>
+        </div>
+
+        <div class="relative flex justify-center lg:justify-end">
+          <img
+            src="assets/app-mockup.png"
+            alt="Mockup do aplicativo JuntaFit mostrando conexões e desafios de treino"
+            class="relative z-10 w-full max-w-[515px]"
+            width="1024"
+            height="1024"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Problema & Solução -->
+    <section
+      id="problema"
+      class="relative border-t border-white/5 bg-dark-800 py-24"
+    >
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="grid gap-16 lg:grid-cols-2">
+          <div class="space-y-6">
+            <span
+              class="text-sm font-bold uppercase tracking-widest text-gray-500"
+              >O Problema</span
+            >
+            <h2 class="text-3xl font-bold leading-tight sm:text-4xl">
+              Praticar exercícios fica mais fácil acompanhado.
+            </h2>
+            <p class="text-lg leading-relaxed text-gray-400">
+              Manter a constância nos treinos é um desafio quando falta
+              motivação, os horários não batem ou não há por perto quem goste do
+              mesmo esporte. O <strong class="text-white">JuntaFit</strong>
+              nasceu para aproximar pessoas com os mesmos objetivos e
+              transformar a sua rotina de atividades físicas.
+            </p>
+            <ul class="space-y-4 text-gray-300">
+              <li class="flex items-start gap-3">
+                <span
+                  class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-red-400"
+                  >✕</span
+                >
+                Dificuldade para achar parceiros de treino.
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-red-400"
+                  >✕</span
+                >
+                Conflito de horários e objetivos esportivos.
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-red-400"
+                  >✕</span
+                >
+                Falta de motivação para manter a rotina.
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-red-400"
+                  >✕</span
+                >
+                Pouca oportunidade de criar conexões com os mesmos interesses.
+              </li>
+            </ul>
+          </div>
+
+          <div
+            class="relative space-y-6 rounded-3xl border border-brand/20 bg-gradient-to-br from-dark-700 to-dark-800 p-8 sm:p-10"
+          >
+            <div
+              class="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-brand to-transparent"
+            ></div>
+            <span class="text-sm font-bold uppercase tracking-widest text-brand"
+              >A Solução</span
+            >
+            <h2 class="text-3xl font-bold leading-tight sm:text-4xl">
+              Sua próxima parceria esportiva começa aqui.
+            </h2>
+            <p class="text-lg leading-relaxed text-gray-400">
+              O <strong class="text-white">JuntaFit</strong> aproxima você de
+              pessoas com a mesma paixão por se movimentar. Com perfis
+              personalizados e filtros por localização, disponibilidade e nível
+              de treino, fica fácil encontrar a dupla perfeita, montar um grupo
+              ou se engajar em uma nova comunidade.
+            </p>
+            <ul class="space-y-4 text-gray-300">
+              <li class="flex items-start gap-3">
+                <span
+                  class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand"
+                  >✓</span
+                >
+                Conexões por afinidade esportiva e objetivos.
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand"
+                  >✓</span
+                >
+                Busca inteligente por proximidade e horários.
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand"
+                  >✓</span
+                >
+                Interações individuais e em grupo.
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand"
+                  >✓</span
+                >
+                Desafios, conquistas e comunidades ativas.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Funcionalidades -->
+    <section id="funcionalidades" class="relative py-24">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="mx-auto max-w-3xl text-center">
+          <span class="text-sm font-bold uppercase tracking-widest text-brand"
+            >Funcionalidades</span
+          >
+          <h2 class="mt-4 text-3xl font-bold sm:text-4xl">
+            Tudo o que você precisa para se conectar e treinar.
+          </h2>
+          <p class="mt-4 text-lg text-gray-400">
+            Ferramentas criadas para engajar usuários e fortalecer comunidades
+            esportivas.
+          </p>
+        </div>
+
+        <div class="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <article
+            class="group rounded-3xl border border-white/5 bg-dark-800 p-8 transition-all hover:-translate-y-1 hover:border-brand/20 hover:bg-dark-700"
+          >
+            <div
+              class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 text-brand"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold">Conexões inteligentes</h3>
+            <p class="mt-3 leading-relaxed text-gray-400">
+              Encontre parceiros com base na sua localização, rotina, nível de
+              experiência e modalidades preferidas.
+            </p>
+          </article>
+          <article
+            class="group rounded-3xl border border-white/5 bg-dark-800 p-8 transition-all hover:-translate-y-1 hover:border-brand/20 hover:bg-dark-700"
+          >
+            <div
+              class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 text-brand"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold">Comunidades e grupos</h3>
+            <p class="mt-3 leading-relaxed text-gray-400">
+              Crie ou entre em grupos locais, organize treinos coletivos e
+              amplie sua rede de contatos.
+            </p>
+          </article>
+          <article
+            class="group rounded-3xl border border-white/5 bg-dark-800 p-8 transition-all hover:-translate-y-1 hover:border-brand/20 hover:bg-dark-700"
+          >
+            <div
+              class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 text-brand"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                <path d="M4 22h16" />
+                <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+                <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+                <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold">Desafios e gamificação</h3>
+            <p class="mt-3 leading-relaxed text-gray-400">
+              Participe de desafios individuais ou em grupo, supere metas e
+              acompanhe suas conquistas.
+            </p>
+          </article>
+          <article
+            class="group rounded-3xl border border-white/5 bg-dark-800 p-8 transition-all hover:-translate-y-1 hover:border-brand/20 hover:bg-dark-700"
+          >
+            <div
+              class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 text-brand"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="28"
+                height="28"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold">Segurança e privacidade</h3>
+            <p class="mt-3 leading-relaxed text-gray-400">
+              Interaja com tranquilidade em uma plataforma com perfis
+              verificados, avaliações, bloqueio de usuários e proteção de dados
+              de localização.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Equipe -->
+    <section
+      id="equipe"
+      class="relative border-t border-white/5 bg-dark-800 py-24"
+    >
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="mx-auto max-w-3xl text-center">
+          <span class="text-sm font-bold uppercase tracking-widest text-brand"
+            >Quem Somos</span
+          >
+          <h2 class="mt-4 text-3xl font-bold sm:text-4xl">
+            Tecnologia que conecta pessoas e impulsiona experiências.
+          </h2>
+          <p class="mt-4 text-lg text-gray-400">
+            Somos a equipe por trás do
+            <strong class="text-white">JuntaFit</strong>: uma iniciativa que une
+            tecnologia, inovação e bem-estar para construir uma comunidade
+            esportiva mais integrada, segura e colaborativa.
+          </p>
+        </div>
+
+        <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div
+            class="rounded-3xl border border-white/5 bg-dark-900 p-8 text-center transition-all hover:border-brand/20"
+          >
+            <div
+              class="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-full bg-brand/10 text-2xl font-bold text-brand"
+            >
+              DS
+            </div>
+            <h3 class="text-xl font-bold">Débora Schol</h3>
+            <p class="mt-2 text-sm text-gray-400">Produto e Gestão</p>
+          </div>
+
+          <div
+            class="rounded-3xl border border-white/5 bg-dark-900 p-8 text-center transition-all hover:border-brand/20"
+          >
+            <div
+              class="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-full bg-brand/10 text-2xl font-bold text-brand"
+            >
+              LV
+            </div>
+            <h3 class="text-xl font-bold">Leonardo Mori Vicente</h3>
+            <p class="mt-2 text-sm text-gray-400">Desenvolvimento</p>
+          </div>
+
+          <div
+            class="rounded-3xl border border-white/5 bg-dark-900 p-8 text-center transition-all hover:border-brand/20"
+          >
+            <div
+              class="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-full bg-brand/10 text-2xl font-bold text-brand"
+            >
+              PP
+            </div>
+            <h3 class="text-xl font-bold">Paulina Perdiza</h3>
+            <p class="mt-2 text-sm text-gray-400">Negócios, Parcerias e Segurança</p>
+          </div>
+
+          <div
+            class="rounded-3xl border border-white/5 bg-dark-900 p-8 text-center transition-all hover:border-brand/20"
+          >
+            <div
+              class="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-full bg-brand/10 text-2xl font-bold text-brand"
+            >
+              WS
+            </div>
+            <h3 class="text-xl font-bold">Wirlley Ferreira Santos</h3>
+            <p class="mt-2 text-sm text-gray-400">UX/UI, Desenvolvimento e Infraestrutura</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lista VIP / Rodapé -->
+    <section id="lista-vip" class="relative overflow-hidden py-24">
+      <div class="absolute inset-0 pointer-events-none">
+        <div
+          class="absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/10 blur-[120px]"
+        ></div>
+      </div>
+
+      <div class="relative mx-auto max-w-3xl px-6 text-center">
+        <span class="text-sm font-bold uppercase tracking-widest text-brand"
+          >Lista VIP</span
+        >
+        <h2 class="mt-4 text-3xl font-bold sm:text-4xl">
+          Garanta seu acesso antecipado!
+        </h2>
+        <p class="mt-4 text-lg text-gray-400">
+          Quer testar o <strong class="text-white">JuntaFit</strong> em primeira
+          mão? Cadastre seu e-mail para acompanhar o desenvolvimento e receber
+          novidades exclusivas antes do lançamento.
         </p>
-        <div class="flex flex-wrap items-center gap-4">
-          <a href="#lista-vip" class="rounded-full bg-brand px-8 py-4 text-base font-bold text-brand-contrast shadow-brand transition-all hover:-translate-y-0.5 hover:bg-brand-light hover:shadow-brand-lg">
-            Quero testar primeiro
-          </a>
-          <a href="#funcionalidades" class="rounded-full border border-white/10 bg-white/5 px-8 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10">
-            Conhecer funcionalidades
-          </a>
-        </div>
-        <div class="flex items-center gap-6 pt-4 text-sm text-gray-500">
-          <div class="flex -space-x-3">
-            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-dark-600 border-2 border-dark-900 text-xs font-bold">WS</div>
-            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-dark-600 border-2 border-dark-900 text-xs font-bold">LE</div>
-            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-dark-600 border-2 border-dark-900 text-xs font-bold">PA</div>
+
+        <form id="vip-form" class="mt-10 flex flex-col gap-4 sm:flex-row">
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Digite seu melhor e-mail"
+            required
+            class="flex-1 rounded-full border border-white/10 bg-dark-800 px-6 py-4 text-white placeholder-gray-500 outline-none transition-all focus:border-brand focus:ring-2 focus:ring-brand/20"
+          />
+          <button
+            type="submit"
+            class="rounded-full bg-brand px-8 py-4 text-base font-bold text-brand-contrast shadow-brand transition-all hover:bg-brand-light hover:shadow-brand-lg"
+          >
+            Quero acompanhar!
+          </button>
+        </form>
+        <p
+          id="form-message"
+          class="mt-4 hidden text-sm font-medium text-brand"
+        ></p>
+      </div>
+    </section>
+
+    <footer class="border-t border-white/5 bg-dark-900 py-12">
+      <div
+        class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 md:flex-row"
+      >
+        <div class="max-w-md space-y-2 text-center md:text-left">
+          <div class="text-xl tracking-tight">
+            <span class="font-normal text-white">Junta</span
+            ><span class="font-bold text-brand">Fit</span>
           </div>
-          <p>Feito por devs que também levantam peso.</p>
-        </div>
-      </div>
-
-      <div class="relative flex justify-center lg:justify-end">
-        <!-- <div class="absolute inset-0 flex items-center justify-center">
-          <div class="h-[320px] w-[320px] rounded-full bg-brand/20 blur-[100px] sm:h-[420px] sm:w-[420px]"></div>
-        </div> -->
-        <img
-          src="assets/app-mockup.png"
-          alt="Mockup do aplicativo FitDevs mostrando desafios e ranking de treinos"
-          class="relative z-10 w-full max-w-[515px]"
-          width="1024"
-          height="1024"
-        />
-      </div>
-    </div>
-  </section>
-
-  <!-- Problema & Solução -->
-  <section id="problema" class="relative border-t border-white/5 bg-dark-800 py-24">
-    <div class="mx-auto max-w-7xl px-6">
-      <div class="grid gap-16 lg:grid-cols-2">
-        <div class="space-y-6">
-          <span class="text-sm font-bold uppercase tracking-widest text-gray-500">O Problema</span>
-          <h2 class="text-3xl font-bold leading-tight sm:text-4xl">
-            Treinar sozinho é chato. A rotina de trabalho vence.
-          </h2>
-          <p class="text-lg leading-relaxed text-gray-400">
-            Você passa horas sentado, codando, estudando, em reuniões. Quando sobra um tempinho, a preguiça fala mais alto. Faltam motivação, companhia e aquela energia de turma para manter a constância.
+          <p class="text-sm font-medium text-gray-300">
+            Encontre sua companhia. Transforme seu treino.
           </p>
-          <ul class="space-y-4 text-gray-300">
-            <li class="flex items-start gap-3">
-              <span class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-red-400">✕</span>
-              Falta de motivação para treinar sozinho
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-red-400">✕</span>
-              Rotina sedentária de quem trabalha sentado
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-red-400">✕</span>
-              Dificuldade para manter constância sem cobrança
-            </li>
-          </ul>
-        </div>
-
-        <div class="relative space-y-6 rounded-3xl border border-brand/20 bg-gradient-to-br from-dark-700 to-dark-800 p-8 sm:p-10">
-          <div class="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-brand to-transparent"></div>
-          <span class="text-sm font-bold uppercase tracking-widest text-brand">A Solução</span>
-          <h2 class="text-3xl font-bold leading-tight sm:text-4xl">
-            Transforme seus treinos em um jogo.
-          </h2>
-          <p class="text-lg leading-relaxed text-gray-400">
-            A FitDevs une tecnologia e bem-estar para criar uma experiência social de treino. Marque horários com amigos, crie ligas semanais e acompanhe quem está no topo do ranking.
+          <p class="text-sm text-gray-400">
+            Conectando pessoas por meio da atividade física, da tecnologia e da
+            comunidade.
           </p>
-          <ul class="space-y-4 text-gray-300">
-            <li class="flex items-start gap-3">
-              <span class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand">✓</span>
-              Match de treino com amigos disponíveis
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand">✓</span>
-              Competições e desafios semanais
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand">✓</span>
-              Feed da galera para se motivar (e cobrar)
-            </li>
-          </ul>
+          <p class="text-sm text-gray-500">
+            © 2026 JuntaFit. Todos os direitos reservados.
+          </p>
+        </div>
+        <div class="flex items-center gap-5 text-gray-400">
+          <a
+            href="#"
+            aria-label="Instagram"
+            class="transition-colors hover:text-brand"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+            </svg>
+          </a>
+          <a
+            href="#"
+            aria-label="GitHub"
+            class="transition-colors hover:text-brand"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 .35-3.22 1-1.75-.5-3.56-.5-5.34 0C7.1 2.55 6 2.2 6 2.2c-.3 1.15-.3 2.35 0 3.5a5.4 5.4 0 0 0-1 3.5c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"
+              />
+              <path d="M9 18c-4.51 2-5-2-7-2" />
+            </svg>
+          </a>
+          <a
+            href="#"
+            aria-label="LinkedIn"
+            class="transition-colors hover:text-brand"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+              />
+              <rect width="4" height="12" x="2" y="9" />
+              <circle cx="4" cy="4" r="2" />
+            </svg>
+          </a>
         </div>
       </div>
-    </div>
-  </section>
+    </footer>
 
-  <!-- Funcionalidades -->
-  <section id="funcionalidades" class="relative py-24">
-    <div class="mx-auto max-w-7xl px-6">
-      <div class="mx-auto max-w-3xl text-center">
-        <span class="text-sm font-bold uppercase tracking-widest text-brand">Funcionalidades</span>
-        <h2 class="mt-4 text-3xl font-bold sm:text-4xl">Tudo para você e sua turma dominarem a rotina</h2>
-        <p class="mt-4 text-lg text-gray-400">Três pilares que tornam o treino mais divertido, social e viciante.</p>
-      </div>
-
-      <div class="mt-16 grid gap-8 md:grid-cols-3">
-        <article class="group rounded-3xl border border-white/5 bg-dark-800 p-8 transition-all hover:-translate-y-1 hover:border-brand/20 hover:bg-dark-700">
-          <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 text-brand">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
-          <h3 class="text-xl font-bold">Match de Treino</h3>
-          <p class="mt-3 leading-relaxed text-gray-400">Encontre amigos disponíveis para treinar no mesmo horário que você. Basta escolher o dia, o horário e convidar a galera.</p>
-        </article>
-
-        <article class="group rounded-3xl border border-white/5 bg-dark-800 p-8 transition-all hover:-translate-y-1 hover:border-brand/20 hover:bg-dark-700">
-          <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 text-brand">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-          </div>
-          <h3 class="text-xl font-bold">Competições e Desafios</h3>
-          <p class="mt-3 leading-relaxed text-gray-400">Crie ligas semanais de constância, carga levantada ou quilômetros percorridos. Quem será o campeão da turma?</p>
-        </article>
-
-        <article class="group rounded-3xl border border-white/5 bg-dark-800 p-8 transition-all hover:-translate-y-1 hover:border-brand/20 hover:bg-dark-700">
-          <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/10 text-brand">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </div>
-          <h3 class="text-xl font-bold">Feed da Galera</h3>
-          <p class="mt-3 leading-relaxed text-gray-400">Veja quando seus amigos concluíram o treino do dia. Mande aquela pilha — ou uma cobrança amiga — para ninguém desistir.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Equipe -->
-  <section id="equipe" class="relative border-t border-white/5 bg-dark-800 py-24">
-    <div class="mx-auto max-w-7xl px-6">
-      <div class="mx-auto max-w-3xl text-center">
-        <span class="text-sm font-bold uppercase tracking-widest text-brand">Quem Somos</span>
-        <h2 class="mt-4 text-3xl font-bold sm:text-4xl">Feito por quem entende de código e de treino</h2>
-        <p class="mt-4 text-lg text-gray-400">Somos o FitDevs: três amigos unindo tecnologia e saúde para criar algo que realmente muda a rotina.</p>
-      </div>
-
-      <div class="mt-16 grid gap-8 sm:grid-cols-3">
-        <div class="rounded-3xl border border-white/5 bg-dark-900 p-8 text-center transition-all hover:border-brand/20">
-          <div class="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-full bg-brand/10 text-2xl font-bold text-brand">WS</div>
-          <h3 class="text-xl font-bold">Wirlley</h3>
-          <p class="mt-2 text-sm text-gray-400">Co-fundador & Dev</p>
-        </div>
-
-        <div class="rounded-3xl border border-white/5 bg-dark-900 p-8 text-center transition-all hover:border-brand/20">
-          <div class="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-full bg-brand/10 text-2xl font-bold text-brand">LE</div>
-          <h3 class="text-xl font-bold">Leo</h3>
-          <p class="mt-2 text-sm text-gray-400">Co-fundador & Dev</p>
-        </div>
-
-        <div class="rounded-3xl border border-white/5 bg-dark-900 p-8 text-center transition-all hover:border-brand/20">
-          <div class="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-full bg-brand/10 text-2xl font-bold text-brand">PA</div>
-          <h3 class="text-xl font-bold">Paulina</h3>
-          <p class="mt-2 text-sm text-gray-400">Co-fundadora & Dev</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Lista VIP / Rodapé -->
-  <section id="lista-vip" class="relative overflow-hidden py-24">
-    <div class="absolute inset-0 pointer-events-none">
-      <div class="absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/10 blur-[120px]"></div>
-    </div>
-
-    <div class="relative mx-auto max-w-3xl px-6 text-center">
-      <span class="text-sm font-bold uppercase tracking-widest text-brand">Lista VIP</span>
-      <h2 class="mt-4 text-3xl font-bold sm:text-4xl">Seja um dos primeiros a testar</h2>
-      <p class="mt-4 text-lg text-gray-400">Entre na lista VIP e receba acesso antecipado ao app, novidades e conteúdos exclusivos sobre saúde e bem-estar para devs.</p>
-
-      <form id="vip-form" class="mt-10 flex flex-col gap-4 sm:flex-row">
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="Digite seu melhor e-mail"
-          required
-          class="flex-1 rounded-full border border-white/10 bg-dark-800 px-6 py-4 text-white placeholder-gray-500 outline-none transition-all focus:border-brand focus:ring-2 focus:ring-brand/20"
-        />
-        <button
-          type="submit"
-          class="rounded-full bg-brand px-8 py-4 text-base font-bold text-brand-contrast shadow-brand transition-all hover:bg-brand-light hover:shadow-brand-lg"
-        >
-          Entrar na Lista VIP
-        </button>
-      </form>
-      <p id="form-message" class="mt-4 hidden text-sm font-medium text-brand"></p>
-    </div>
-  </section>
-
-  <footer class="border-t border-white/5 bg-dark-900 py-12">
-    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 md:flex-row">
-      <div class="flex items-center gap-2 text-xl tracking-tight">
-        <span class="font-normal text-white">Fit</span><span class="font-bold text-brand">Devs</span>
-      </div>
-      <p class="text-sm text-gray-500">© 2026 FitDevs. Todos os direitos reservados.</p>
-      <div class="flex items-center gap-5 text-gray-400">
-        <a href="#" aria-label="Instagram" class="transition-colors hover:text-brand">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-        </a>
-        <a href="#" aria-label="GitHub" class="transition-colors hover:text-brand">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 .35-3.22 1-1.75-.5-3.56-.5-5.34 0C7.1 2.55 6 2.2 6 2.2c-.3 1.15-.3 2.35 0 3.5a5.4 5.4 0 0 0-1 3.5c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
-        </a>
-        <a href="#" aria-label="LinkedIn" class="transition-colors hover:text-brand">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
-        </a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="script.js?v=2"></script>
-</body>
+    <script src="script.js?v=2"></script>
+  </body>
 </html>

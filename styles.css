@@ -44,8 +44,12 @@ html {
 }
 
 body {
-  font-feature-settings: "liga" 1, "calt" 1;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Selection */
@@ -56,7 +60,7 @@ body {
 
 /* Focus visible */
 *:focus-visible {
-  outline: 2px solid #00950C;
+  outline: 2px solid #00950c;
   outline-offset: 2px;
 }
 
@@ -80,9 +84,18 @@ article,
 }
 
 /* Stagger cards */
-article:nth-child(1) { animation-delay: 0.1s; }
-article:nth-child(2) { animation-delay: 0.2s; }
-article:nth-child(3) { animation-delay: 0.3s; }
+article:nth-child(1) {
+  animation-delay: 0.1s;
+}
+article:nth-child(2) {
+  animation-delay: 0.2s;
+}
+article:nth-child(3) {
+  animation-delay: 0.3s;
+}
+article:nth-child(4) {
+  animation-delay: 0.4s;
+}
 
 /* Form states */
 #vip-form input:user-invalid {
