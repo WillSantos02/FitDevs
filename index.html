@@ -1,13 +1,55 @@
 <!doctype html>
+<!--
+  =============================================================================
+  JuntaFit — Landing Page | index.html
+  -----------------------------------------------------------------------------
+  O QUE É: a página de divulgação (landing page) do JuntaFit, um aplicativo
+  que conecta pessoas para treinarem juntas, por modalidade, objetivo,
+  horário e localização. A página apresenta a ideia e coleta e-mails de
+  interessados em testar o app antes do lançamento (a "Lista VIP").
+
+  COMO O PROJETO ESTÁ ORGANIZADO (site estático, sem back-end):
+    - index.html  → estrutura e conteúdo (este arquivo)
+    - styles.css  → cores dos temas claro/escuro, animações e ajustes globais
+    - script.js   → interatividade (tema, rolagem, formulário, navbar)
+    - assets/     → imagens (mockup do app)
+
+  TECNOLOGIAS:
+    - HTML5 semântico (nav, section, article, footer)
+    - Tailwind CSS via CDN: o visual é feito com classes direto nas tags.
+      Ex.: class="rounded-full bg-brand px-8 py-4" = botão arredondado, fundo
+      verde da marca, espaçamento interno. Prefixos como "md:" e "lg:" aplicam
+      a classe só em telas médias/grandes (layout responsivo) e "hover:" só
+      quando o mouse está em cima.
+    - JavaScript puro (sem bibliotecas)
+    - Fonte Inter (Google Fonts) e ícones SVG desenhados inline
+
+  ESTRUTURA DA PÁGINA, de cima para baixo:
+    1. Navbar (menu fixo + botão de tema)
+    2. Hero (chamada principal + imagem do app)
+    3. O Problema & A Solução (#problema)
+    4. Funcionalidades (#funcionalidades)
+    5. Equipe (#equipe)
+    6. Lista VIP — formulário de e-mail (#lista-vip)
+    7. Rodapé
+  =============================================================================
+-->
+<!-- lang="pt-BR": informa o idioma ao navegador, tradutores e leitores de tela -->
 <html lang="pt-BR">
   <head>
+    <!-- ===================== CABEÇALHO (não aparece na tela) ===================== -->
+    <!-- UTF-8 permite acentos e emojis; viewport faz a página se ajustar ao
+         tamanho da tela do celular (essencial para o layout responsivo). -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Título da aba e descrição exibida pelo Google nos resultados de busca (SEO) -->
     <title>JuntaFit — Encontre sua companhia. Transforme seu treino.</title>
     <meta
       name="description"
       content="Conecte-se com pessoas que compartilham suas modalidades, objetivos e horários. Encontre parceiros ideais, descubra novos esportes e movimente-se em comunidade."
     />
+    <!-- Open Graph / Twitter: definem título e descrição da "prévia" que aparece
+         quando o link é compartilhado no WhatsApp, LinkedIn, X etc. -->
     <meta
       property="og:title"
       content="JuntaFit — Encontre sua companhia. Transforme seu treino."
@@ -18,12 +60,19 @@
     />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <!-- Fonte Inter do Google Fonts. Os "preconnect" abrem a conexão com o
+         servidor de fontes antecipadamente, para a fonte carregar mais rápido. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
+    <!-- Script de tema que roda ANTES de a página ser desenhada.
+         Fica aqui no <head> (e não no script.js, que só carrega no fim) para
+         evitar que a página apareça por um instante com o tema errado.
+         Ordem de prioridade: 1) tema salvo pelo usuário no localStorage;
+         2) tema do sistema operacional (claro/escuro). -->
     <script>
       // Aplica o tema antes da renderização para evitar "flash" de tema errado
       (function () {
@@ -39,7 +88,16 @@
         document.documentElement.setAttribute("data-theme", theme);
       })();
     </script>
+    <!-- Tailwind CSS carregado por CDN: lê as classes usadas no HTML e gera o
+         CSS correspondente direto no navegador (não precisa de build). -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuração do Tailwind: cria as cores e sombras próprias do projeto.
+         - "brand" é o verde da identidade visual do JuntaFit (#00950C),
+           usado em classes como bg-brand, text-brand, border-brand/20.
+         - white, dark-* e gray-* foram redefinidas para ler as variáveis CSS
+           do styles.css. É isso que permite trocar o tema inteiro mudando só
+           o atributo data-theme, sem alterar nenhuma classe do HTML.
+           "<alpha-value>" é onde o Tailwind encaixa a opacidade (ex.: /80). -->
     <script>
       tailwind.config = {
         theme: {
@@ -78,20 +136,39 @@
         },
       };
     </script>
+    <!-- Nosso CSS próprio. O "?v=2" é um truque de versão: ao mudar o número,
+         o navegador entende que é um arquivo novo e não usa a cópia antiga em
+         cache (garante que o visitante veja a versão atualizada). -->
     <link rel="stylesheet" href="styles.css?v=2" />
   </head>
+  <!-- ===================== CORPO (conteúdo visível) ===================== -->
+  <!-- bg-dark-900 = cor de fundo do tema; text-white = cor do texto do tema;
+       antialiased = suaviza a renderização da fonte. -->
   <body class="bg-dark-900 text-white antialiased">
-    <!-- Navbar -->
+    <!-- =====================================================================
+         1. NAVBAR (barra de navegação)
+         ---------------------------------------------------------------------
+         "fixed top-0" a mantém presa no topo durante a rolagem; "z-50" a
+         coloca por cima do resto; "backdrop-blur-md" desfoca o conteúdo que
+         passa por trás (efeito vidro). O script.js a esconde ao rolar para
+         baixo e a mostra de novo ao rolar para cima.
+         Contém: logo, links para as seções, botão de tema e botão de chamada.
+         ===================================================================== -->
     <nav
       class="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-dark-900/80 backdrop-blur-md"
     >
       <div
         class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4"
       >
+        <!-- Logo em texto: "Junta" normal + "Fit" em negrito verde.
+             href="#" volta ao topo da página. -->
         <a href="#" class="flex items-center text-2xl tracking-tight">
           <span class="font-normal text-white">Junta</span
           ><span class="font-bold text-brand">Fit</span>
         </a>
+        <!-- Links do menu: cada href="#id" leva à seção com aquele id.
+             "hidden md:flex" = escondido no celular, visível a partir de
+             telas médias (tablet/desktop). -->
         <div
           class="hidden items-center gap-8 text-sm font-medium text-gray-300 md:flex"
         >
@@ -109,6 +186,10 @@
           >
         </div>
         <div class="flex items-center gap-3">
+          <!-- Botão de alternar tema claro/escuro. O id "theme-toggle" é usado
+               pelo script.js para detectar o clique. Dentro dele há DOIS
+               ícones SVG (sol e lua); o styles.css esconde o que não se aplica
+               ao tema atual. aria-label descreve o botão para leitores de tela. -->
           <button
             type="button"
             id="theme-toggle"
@@ -116,6 +197,9 @@
             aria-label="Alternar tema"
             title="Alternar tema"
           >
+            <!-- Ícone de sol (aparece no tema escuro). stroke="currentColor"
+                 faz o ícone herdar a cor do texto, então ele muda de cor no
+                 hover junto com o botão. aria-hidden: é decorativo. -->
             <svg
               class="theme-icon-sun"
               xmlns="http://www.w3.org/2000/svg"
@@ -139,6 +223,7 @@
               <path d="m6.34 17.66-1.41 1.41" />
               <path d="m19.07 4.93-1.41 1.41" />
             </svg>
+            <!-- Ícone de lua (aparece no tema claro) -->
             <svg
               class="theme-icon-moon"
               xmlns="http://www.w3.org/2000/svg"
@@ -155,6 +240,7 @@
               <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
             </svg>
           </button>
+          <!-- Botão de chamada para ação (CTA): leva ao formulário da Lista VIP -->
           <a
             href="#lista-vip"
             class="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-brand-contrast shadow-brand transition-all hover:bg-brand-light hover:shadow-brand-lg"
@@ -165,10 +251,20 @@
       </div>
     </nav>
 
-    <!-- Hero -->
+    <!-- =====================================================================
+         2. HERO (primeira dobra)
+         ---------------------------------------------------------------------
+         É a primeira coisa que o visitante vê: ocupa a tela inteira
+         (min-h-screen). Traz a proposta de valor do JuntaFit, dois botões de
+         ação e a imagem do aplicativo. Em telas grandes (lg:grid-cols-2) fica
+         em duas colunas: texto à esquerda, imagem à direita; no celular, uma
+         embaixo da outra. "pt-20" compensa a altura da navbar fixa.
+         ===================================================================== -->
     <section
       class="relative flex min-h-screen items-center overflow-hidden pt-20"
     >
+      <!-- Fundo decorativo: dois círculos verdes bem desfocados (blur) que
+           criam um brilho suave. pointer-events-none = não atrapalham cliques. -->
       <div class="absolute inset-0 pointer-events-none">
         <div
           class="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-brand/10 blur-[120px]"
@@ -181,7 +277,11 @@
       <div
         class="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-2"
       >
+        <!-- Coluna de texto -->
         <div class="space-y-8">
+          <!-- Selo "Em breve na Google Play" com um ponto verde pulsando:
+               são dois círculos sobrepostos, um fixo e outro com animate-ping
+               (animação pronta do Tailwind que expande e some). -->
           <div
             class="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-brand/10 px-4 py-1.5 text-sm font-medium text-brand"
           >
@@ -195,6 +295,8 @@
             </span>
             Em breve na Google Play
           </div>
+          <!-- Título principal (h1 — só existe um por página, importante para
+               SEO). O tamanho da fonte cresce conforme a tela: sm:, lg:. -->
           <h1
             class="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl"
           >
@@ -206,6 +308,9 @@
             e horários. Encontre parceiros ideais, descubra novos esportes e
             movimente-se em comunidade.
           </p>
+          <!-- Botões de ação: o principal (verde, preenchido) leva à Lista VIP;
+               o secundário (transparente) leva às funcionalidades.
+               hover:-translate-y-0.5 faz o botão "subir" levemente no hover. -->
           <div class="flex flex-wrap items-center gap-4">
             <a
               href="#lista-vip"
@@ -226,6 +331,10 @@
           </p>
         </div>
 
+        <!-- Coluna da imagem: mockup (simulação) das telas do app.
+             "alt" descreve a imagem para leitores de tela e para o Google;
+             width/height reservam o espaço antes de a imagem carregar,
+             evitando que o layout "pule". -->
         <div class="relative flex justify-center lg:justify-end">
           <img
             src="assets/app-mockup.png"
@@ -238,13 +347,25 @@
       </div>
     </section>
 
-    <!-- Problema & Solução -->
+    <!-- =====================================================================
+         3. O PROBLEMA & A SOLUÇÃO (id="problema")
+         ---------------------------------------------------------------------
+         Duas colunas lado a lado (no celular, empilhadas):
+         - Esquerda: a dor do público — dificuldade de achar parceiros,
+           horários que não batem, falta de motivação. Itens marcados com ✕
+           vermelho.
+         - Direita: como o JuntaFit resolve, num card destacado com borda
+           verde. Itens marcados com ✓ verde.
+         O contraste visual vermelho × verde reforça a mensagem
+         "problema → solução".
+         ===================================================================== -->
     <section
       id="problema"
       class="relative border-t border-white/5 bg-dark-800 py-24"
     >
       <div class="mx-auto max-w-7xl px-6">
         <div class="grid gap-16 lg:grid-cols-2">
+          <!-- Coluna do problema -->
           <div class="space-y-6">
             <span
               class="text-sm font-bold uppercase tracking-widest text-gray-500"
@@ -292,6 +413,9 @@
             </ul>
           </div>
 
+          <!-- Card da solução: fundo em degradê (bg-gradient-to-br) e uma
+               linha verde brilhante no topo, que se apaga nas pontas
+               (from-transparent via-brand to-transparent). -->
           <div
             class="relative space-y-6 rounded-3xl border border-brand/20 bg-gradient-to-br from-dark-700 to-dark-800 p-8 sm:p-10"
           >
@@ -346,9 +470,24 @@
       </div>
     </section>
 
-    <!-- Funcionalidades -->
+    <!-- =====================================================================
+         4. FUNCIONALIDADES (id="funcionalidades")
+         ---------------------------------------------------------------------
+         Os 4 pilares do app, cada um em um card (<article>):
+           - Conexões inteligentes  (ícone de localização)
+           - Comunidades e grupos   (ícone de pessoas)
+           - Desafios e gamificação (ícone de troféu)
+           - Segurança e privacidade (ícone de escudo)
+         A grade é responsiva: 1 coluna no celular, 2 no tablet (md:) e 4 no
+         desktop (lg:). No hover o card sobe um pouco e a borda fica verde.
+         No styles.css, os cards entram com animação em cascata.
+         Os ícones são SVG inline (desenhados com código, sem arquivo de
+         imagem), no estilo da biblioteca de ícones Lucide.
+         ===================================================================== -->
     <section id="funcionalidades" class="relative py-24">
       <div class="mx-auto max-w-7xl px-6">
+        <!-- Cabeçalho da seção: rótulo pequeno + título + subtítulo.
+             Esse mesmo padrão se repete nas seções seguintes. -->
         <div class="mx-auto max-w-3xl text-center">
           <span class="text-sm font-bold uppercase tracking-widest text-brand"
             >Funcionalidades</span
@@ -363,6 +502,7 @@
         </div>
 
         <div class="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <!-- Card 1: Conexões inteligentes -->
           <article
             class="group rounded-3xl border border-white/5 bg-dark-800 p-8 transition-all hover:-translate-y-1 hover:border-brand/20 hover:bg-dark-700"
           >
@@ -391,6 +531,7 @@
               experiência e modalidades preferidas.
             </p>
           </article>
+          <!-- Card 2: Comunidades e grupos -->
           <article
             class="group rounded-3xl border border-white/5 bg-dark-800 p-8 transition-all hover:-translate-y-1 hover:border-brand/20 hover:bg-dark-700"
           >
@@ -421,6 +562,7 @@
               amplie sua rede de contatos.
             </p>
           </article>
+          <!-- Card 3: Desafios e gamificação -->
           <article
             class="group rounded-3xl border border-white/5 bg-dark-800 p-8 transition-all hover:-translate-y-1 hover:border-brand/20 hover:bg-dark-700"
           >
@@ -453,6 +595,7 @@
               acompanhe suas conquistas.
             </p>
           </article>
+          <!-- Card 4: Segurança e privacidade -->
           <article
             class="group rounded-3xl border border-white/5 bg-dark-800 p-8 transition-all hover:-translate-y-1 hover:border-brand/20 hover:bg-dark-700"
           >
@@ -486,7 +629,15 @@
       </div>
     </section>
 
-    <!-- Equipe -->
+    <!-- =====================================================================
+         5. EQUIPE (id="equipe")
+         ---------------------------------------------------------------------
+         Apresenta os integrantes do projeto e a área de cada um. Cada card
+         tem um "avatar" com as iniciais (no lugar de foto), o nome e a
+         função. Mesma grade responsiva: 1 → 2 (sm:) → 4 (lg:) colunas.
+         O fundo bg-dark-800 alterna com a seção anterior para separá-las
+         visualmente.
+         ===================================================================== -->
     <section
       id="equipe"
       class="relative border-t border-white/5 bg-dark-800 py-24"
@@ -508,6 +659,7 @@
         </div>
 
         <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <!-- Card de integrante: avatar com iniciais + nome + área -->
           <div
             class="rounded-3xl border border-white/5 bg-dark-900 p-8 text-center transition-all hover:border-brand/20"
           >
@@ -559,8 +711,19 @@
       </div>
     </section>
 
-    <!-- Lista VIP / Rodapé -->
+    <!-- =====================================================================
+         6. LISTA VIP (id="lista-vip")
+         ---------------------------------------------------------------------
+         Objetivo principal da página: captar e-mails de quem quer testar o
+         app antes do lançamento. Todos os botões de ação da página trazem o
+         visitante para cá.
+         Funcionamento (ver script.js): ao enviar, o JavaScript valida o
+         e-mail e mostra uma mensagem de sucesso ou erro no <p id="form-message">.
+         Ainda não há servidor/banco de dados — o envio é simulado.
+         ===================================================================== -->
     <section id="lista-vip" class="relative overflow-hidden py-24">
+      <!-- Brilho verde desfocado centralizado ao fundo (decorativo) -->
+
       <div class="absolute inset-0 pointer-events-none">
         <div
           class="absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand/10 blur-[120px]"
@@ -580,6 +743,10 @@
           novidades exclusivas antes do lançamento.
         </p>
 
+        <!-- Formulário: campo de e-mail + botão. No celular ficam um embaixo
+             do outro (flex-col); a partir de sm: ficam lado a lado (sm:flex-row).
+             type="email" e required ativam a validação nativa do navegador,
+             que funciona junto com a validação do script.js. -->
         <form id="vip-form" class="mt-10 flex flex-col gap-4 sm:flex-row">
           <input
             type="email"
@@ -596,6 +763,9 @@
             Quero acompanhar!
           </button>
         </form>
+        <!-- Mensagem de retorno do formulário. Começa escondida ("hidden");
+             o script.js preenche o texto, remove o "hidden" e define a cor
+             (verde para sucesso, vermelho para erro). -->
         <p
           id="form-message"
           class="mt-4 hidden text-sm font-medium text-brand"
@@ -603,6 +773,13 @@
       </div>
     </section>
 
+    <!-- =====================================================================
+         7. RODAPÉ
+         ---------------------------------------------------------------------
+         Logo, slogan, descrição curta, direitos autorais e ícones de redes
+         sociais (Instagram, GitHub, LinkedIn). Os links ainda apontam para
+         "#" porque os perfis oficiais não foram criados.
+         ===================================================================== -->
     <footer class="border-t border-white/5 bg-dark-900 py-12">
       <div
         class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 md:flex-row"
@@ -694,6 +871,9 @@
       </div>
     </footer>
 
+    <!-- O script.js é carregado no FINAL do <body>: assim, quando ele roda,
+         todos os elementos do HTML já existem e podem ser encontrados pelo
+         getElementById/querySelector. -->
     <script src="script.js?v=2"></script>
   </body>
 </html>

@@ -1,25 +1,55 @@
-/* FitDevs Landing Page — Custom Styles */
+/* =============================================================================
+ * JuntaFit — Landing Page | styles.css
+ * -----------------------------------------------------------------------------
+ * A maior parte do visual da página é feita com o Tailwind CSS, um framework
+ * de "classes utilitárias": em vez de escrever CSS, colocamos classes direto
+ * no HTML (ex.: "rounded-full bg-brand px-8" = cantos arredondados, fundo
+ * verde da marca, espaçamento horizontal).
+ *
+ * Este arquivo complementa o Tailwind com o que ele não faz sozinho:
+ *   - as variáveis de cor de cada tema (claro e escuro);
+ *   - qual ícone (sol ou lua) aparece no botão de tema;
+ *   - detalhes globais: rolagem suave, seleção de texto, foco do teclado;
+ *   - animações de entrada das seções;
+ *   - respeito à preferência de "reduzir movimento" (acessibilidade).
+ * ========================================================================== */
 
-/* Theme tokens (RGB channels, consumed by the Tailwind config) */
+/* -----------------------------------------------------------------------------
+ * VARIÁVEIS DE COR DOS TEMAS
+ * -----------------------------------------------------------------------------
+ * Cada variável guarda só os 3 números de uma cor RGB (ex.: "10 10 10"), sem
+ * o "rgb()". Isso é proposital: a configuração do Tailwind no index.html
+ * monta a cor como rgb(var(--dark-900) / <opacidade>), o que permite usar
+ * classes com transparência, como "bg-dark-900/80" (80% de opacidade).
+ *
+ * O truque do tema: as classes do HTML NUNCA mudam. O que muda é o valor das
+ * variáveis, conforme o atributo data-theme da tag <html> (trocado pelo
+ * script.js). Ex.: "bg-dark-900" é quase preto no tema escuro e branco no
+ * tema claro. Os nomes (dark-900, white...) vêm do tema escuro, o original.
+ * ------------------------------------------------------------------------ */
+
+/* Tema ESCURO (também é o padrão, por isso aparece junto com :root) */
 :root,
 :root[data-theme="dark"] {
-  color-scheme: dark;
-  --white: 255 255 255;
-  --dark-900: 10 10 10;
-  --dark-800: 17 17 17;
-  --dark-700: 26 26 26;
+  color-scheme: dark; /* avisa o navegador: barras de rolagem, inputs etc. escuros */
+  --white: 255 255 255; /* cor principal do texto */
+  --dark-900: 10 10 10; /* fundo da página (o mais escuro) */
+  --dark-800: 17 17 17; /* fundo de seções alternadas e cards */
+  --dark-700: 26 26 26; /* fundo de cards em hover / gradientes */
   --dark-600: 34 34 34;
   --dark-500: 42 42 42;
-  --gray-300: 209 213 219;
-  --gray-400: 156 163 175;
-  --gray-500: 107 114 128;
+  --gray-300: 209 213 219; /* textos secundários (mais claros) */
+  --gray-400: 156 163 175; /* parágrafos */
+  --gray-500: 107 114 128; /* textos menos importantes (rótulos, copyright) */
 }
 
+/* Tema CLARO: mesmos nomes, valores invertidos.
+ * "--white" vira quase preto (texto escuro) e os "dark-*" viram tons claros. */
 :root[data-theme="light"] {
   color-scheme: light;
   --white: 17 17 17;
   --dark-900: 255 255 255;
-  --dark-800: 245 247 245;
+  --dark-800: 245 247 245; /* tons claros levemente esverdeados */
   --dark-700: 236 239 236;
   --dark-600: 226 230 226;
   --dark-500: 212 217 212;
@@ -28,43 +58,68 @@
   --gray-500: 107 114 128;
 }
 
-/* Theme toggle icons */
+/* -----------------------------------------------------------------------------
+ * ÍCONE DO BOTÃO DE TEMA
+ * -----------------------------------------------------------------------------
+ * O botão tem os dois ícones (sol e lua) no HTML. Aqui escondemos um deles:
+ * no tema escuro aparece o sol (clique para ir ao claro) e no tema claro
+ * aparece a lua (clique para ir ao escuro). Tudo só com CSS, sem JS.
+ * ------------------------------------------------------------------------ */
 :root[data-theme="dark"] .theme-icon-moon,
 :root[data-theme="light"] .theme-icon-sun {
   display: none;
 }
 
-/* Keep error red readable on light backgrounds */
+/* O vermelho padrão da mensagem de erro (text-red-400) é claro demais para
+ * fundo branco; no tema claro usamos um vermelho mais forte, legível. */
 :root[data-theme="light"] .text-red-400 {
   color: #dc2626;
 }
 
+/* -----------------------------------------------------------------------------
+ * ESTILOS GLOBAIS
+ * ------------------------------------------------------------------------ */
+
+/* Ao clicar num link do menu (ex.: #equipe), a página desliza até a seção
+ * em vez de pular de uma vez. */
 html {
   scroll-behavior: smooth;
 }
 
 body {
+  /* Ativa ligaduras e alternativas contextuais da fonte Inter
+   * (pequenos ajustes tipográficos que deixam o texto mais bonito). */
   font-feature-settings:
     "liga" 1,
     "calt" 1;
+  /* Ao trocar de tema, fundo e texto mudam suavemente em 0,3s em vez de
+   * trocarem de forma brusca. */
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
 }
 
-/* Selection */
+/* Cor de fundo do texto selecionado com o mouse: verde da marca (#00950C =
+ * rgb 0,149,12) com 30% de opacidade. */
 ::selection {
   background-color: rgba(0, 149, 12, 0.3);
   color: rgb(var(--white));
 }
 
-/* Focus visible */
+/* Acessibilidade: quem navega pelo TECLADO (tecla Tab) vê um contorno verde
+ * no elemento focado. :focus-visible não mostra o contorno em cliques de
+ * mouse, só quando é útil. */
 *:focus-visible {
   outline: 2px solid #00950c;
   outline-offset: 2px;
 }
 
-/* Subtle fade-in animation for sections */
+/* -----------------------------------------------------------------------------
+ * ANIMAÇÃO DE ENTRADA
+ * -----------------------------------------------------------------------------
+ * @keyframes define uma animação: o elemento começa invisível (opacity 0) e
+ * 24px abaixo, e termina visível na posição normal — um "surgir de baixo".
+ * ------------------------------------------------------------------------ */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -76,6 +131,9 @@ body {
   }
 }
 
+/* Aplica a animação ao conteúdo das seções, aos cards (<article>) e ao
+ * formulário. "both" mantém o estado inicial durante o atraso (delay) e o
+ * estado final depois que a animação termina. */
 section > div,
 article,
 #vip-form {
@@ -83,7 +141,8 @@ article,
   animation-delay: 0.05s;
 }
 
-/* Stagger cards */
+/* Efeito "cascata" nos 4 cards de Funcionalidades: cada um começa 0,1s
+ * depois do anterior, em vez de todos aparecerem juntos. */
 article:nth-child(1) {
   animation-delay: 0.1s;
 }
@@ -97,12 +156,24 @@ article:nth-child(4) {
   animation-delay: 0.4s;
 }
 
-/* Form states */
+/* -----------------------------------------------------------------------------
+ * FORMULÁRIO
+ * -----------------------------------------------------------------------------
+ * :user-invalid só se aplica DEPOIS que o usuário interagiu com o campo e o
+ * valor é inválido (ex.: digitou um e-mail sem "@"). Assim a borda vermelha
+ * não aparece logo que a página abre, com o campo ainda vazio.
+ * ------------------------------------------------------------------------ */
 #vip-form input:user-invalid {
   border-color: #ef4444;
 }
 
-/* Reduced motion */
+/* -----------------------------------------------------------------------------
+ * ACESSIBILIDADE: REDUZIR MOVIMENTO
+ * -----------------------------------------------------------------------------
+ * Algumas pessoas (ex.: com labirintite ou sensibilidade a movimento) ativam
+ * no sistema a opção "reduzir movimento". Quando ela está ligada, desligamos
+ * a rolagem suave e deixamos animações e transições praticamente instantâneas.
+ * ------------------------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
